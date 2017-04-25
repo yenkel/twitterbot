@@ -10,7 +10,7 @@ var Twitter = new twit(config);
 // find latest tweet according the query 'q' in params
 var retweet = function() {
     var params = {
-        q: '#gameofthrones, #GameOfThrones', // REQUIRED
+        q: '#gameofthrones, #GameOfThrones, #thewalkingdead, #TheWalkingDead', // REQUIRED
         result_type: 'recent',
         lang: 'en'
     }
