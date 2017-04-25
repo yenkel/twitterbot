@@ -11,5 +11,3 @@ module.exports = {
     access_token: '856762306822275072-wK0mDhYoXLu2SfbRmwpCmYxUgWsiMyo',
     access_token_secret: 'jyxFycTMQg1GjzQfDba7e9iQ4sWQawzd6icNt02BYS5cZ'
 }
-
-var Twitter = new twit(config);
