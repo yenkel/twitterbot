@@ -12,6 +12,8 @@ var stream = T.stream('user');
 //Anytime someone tweets me
 stream.on('tweet', tweetEvent);
 
+var finalName;
+
 function tweetEvent(eventMsg) {
     // var fs = require('fs');
     // var json = JSON.stringify(eventMsg, null, 2);
