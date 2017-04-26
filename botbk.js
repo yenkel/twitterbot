@@ -1,3 +1,8 @@
+var request = require('request');
+var tvshowName;
+
+
+
 console.log("The replier bot is starting!");
 
 // Dependencies =========================
@@ -20,15 +25,12 @@ function tweetEvent(eventMsg) {
     var replyTo = eventMsg.in_reply_to_screen_name;
     var text = eventMsg.text;
     var fromUser = eventMsg.user.screen_name;
-
     //Method to remove @tvshows_bot from the text
     var tvshowName = text.slice(13, text.length);
 
-    //Method to replace spaces with + for the API
-    var finalName = tvshowName.replace(/ /g, "+");
-    console.log(finalName);
-
     console.log(replyTo + ' ' + fromUser);
+
+    console.log(tvshowName);
 
     if (replyTo === 'tvshows_bot') {
         var newTweet = '@' + fromUser + ', sorry we cant find ' + tvshowName;
@@ -75,7 +77,6 @@ request('http://api.themoviedb.org/3/tv/' + showId + '/videos?api_key=59bb3beb43
     var trailerId = trailerData.results[0].key;
     console.log(trailerId);
 });
-
 
 // // RETWEET BOT ==========================
 
