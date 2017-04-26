@@ -1,3 +1,8 @@
+var request = require('request');
+var tvshowName;
+
+
+
 console.log("The replier bot is starting!");
 
 // Dependencies =========================
@@ -12,8 +17,6 @@ var stream = T.stream('user');
 //Anytime someone tweets me
 stream.on('tweet', tweetEvent);
 
-var finalName;
-
 function tweetEvent(eventMsg) {
     // var fs = require('fs');
     // var json = JSON.stringify(eventMsg, null, 2);
@@ -22,15 +25,12 @@ function tweetEvent(eventMsg) {
     var replyTo = eventMsg.in_reply_to_screen_name;
     var text = eventMsg.text;
     var fromUser = eventMsg.user.screen_name;
-
     //Method to remove @tvshows_bot from the text
     var tvshowName = text.slice(13, text.length);
 
-    //Method to replace spaces with + for the API
-    var finalName = tvshowName.replace(/ /g, "+");
-    console.log(finalName);
-
     console.log(replyTo + ' ' + fromUser);
+
+    console.log(tvshowName);
 
     if (replyTo === 'tvshows_bot') {
         var newTweet = '@' + fromUser + ', sorry we cant find ' + tvshowName;
@@ -61,24 +61,22 @@ var trailerId;
 var tvshowName = "intersection";
 //fetch show's id by it's title
 request('http://api.themoviedb.org/3/search/tv?api_key=59bb3beb43a54e85495a400befbb2d3c&query=' + tvshowName,
-    function(error, response, body) {
-        var tvData = JSON.parse(body);
-        //console.log(movieData);
-        var showId = tvData.results[0].id;
-        console.log(showId);
-    });
+  function(error, response, body){
+      var tvData = JSON.parse(body);
+      //console.log(movieData);
+      var showId = tvData.results[0].id;
+      console.log(showId);
+});
 
 //fetch show's youtube trailer
 request('http://api.themoviedb.org/3/tv/' + showId + '/videos?api_key=59bb3beb43a54e85495a400befbb2d3c',
-    function(error, response, body) {
-        console.log(body);
-        var trailerData = JSON.parse(body);
-        console.log(trailerData);
-        var trailerId = trailerData.results[0].key;
-        console.log(trailerId);
-    });
-
-
+  function(error,response,body){
+    console.log(body);
+    var trailerData = JSON.parse(body);
+    console.log(trailerData);
+    var trailerId = trailerData.results[0].key;
+    console.log(trailerId);
+});
 
 // // RETWEET BOT ==========================
 
