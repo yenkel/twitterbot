@@ -66,17 +66,12 @@ function tweetIt(txt) {
 //initialize global vars
 var showId;
 var trailerId;
-// var finalName;
 //fetch show's id by it's title
 var getId = function(finalName) {
-  // console.log("im in getid function");
     request('http://api.themoviedb.org/3/search/tv?api_key=59bb3beb43a54e85495a400befbb2d3c&query=' + finalName,
         function(error, response, body) {
-          // console.log("ime einarararar");
-            //console.log(body);
             var tvData = JSON.parse(body);
-            //console.log(tvData);
-          if (tvData.results.length == 0) {
+            if (tvData.results.length == 0) {
             console.log("theres no such tv show");
             showId = '2288';
           } else {
@@ -85,13 +80,10 @@ var getId = function(finalName) {
             getTrailer(showId);
           }
         });
-}
+      }
 
 //fetch show's youtube trailer
 var getTrailer = function(showId, newTweet, finalName) {
-    if (showId == undefined) {
-        console.log("It didnt work");
-    } else {
         request('http://api.themoviedb.org/3/tv/' + showId + '/videos?api_key=59bb3beb43a54e85495a400befbb2d3c',
             function(error, response, body) {
               console.log('http://api.themoviedb.org/3/tv/' + showId + '/videos?api_key=59bb3beb43a54e85495a400befbb2d3c');
@@ -105,7 +97,6 @@ var getTrailer = function(showId, newTweet, finalName) {
                    tweetIt(newTweet);
                 }
             });
-    }
 }
 
 
