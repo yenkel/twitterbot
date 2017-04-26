@@ -20,11 +20,15 @@ function tweetEvent(eventMsg) {
     var replyTo = eventMsg.in_reply_to_screen_name;
     var text = eventMsg.text;
     var fromUser = eventMsg.user.screen_name;
+    //Method to remove @tvshows_bot from the text
+    var tvshowName = text.slice(13, text.length);
 
     console.log(replyTo + ' ' + fromUser);
 
+    console.log(tvshowName);
+
     if (replyTo === 'tvshows_bot') {
-        var newTweet = '@' + fromUser + ', sorry it is still under construction ' + text;
+        var newTweet = '@' + fromUser + ', sorry we cant find ' + tvshowName;
         tweetIt(newTweet);
     }
 }
