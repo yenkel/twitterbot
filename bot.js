@@ -3,6 +3,7 @@ console.log("The replier bot is starting!");
 // Dependencies =========================
 var Twit = require('twit');
 var config = require('./config');
+var request = require('request');
 
 var T = new Twit(config);
 
@@ -30,7 +31,8 @@ function tweetEvent(eventMsg) {
     var finalName = tvshowName.replace(/ /g, "+");
     console.log(finalName);
 
-    console.log(replyTo + ' ' + fromUser);
+    getId();
+    getTrailer();
 
     if (replyTo === 'tvshows_bot') {
         var newTweet = '@' + fromUser + ', sorry we cant find ' + tvshowName;
@@ -58,25 +60,34 @@ function tweetIt(txt) {
 //initialize global vars
 var showId;
 var trailerId;
-var tvshowName = "intersection";
+var finalName;
 //fetch show's id by it's title
-request('http://api.themoviedb.org/3/search/tv?api_key=59bb3beb43a54e85495a400befbb2d3c&query=' + tvshowName,
-    function(error, response, body) {
-        var tvData = JSON.parse(body);
-        //console.log(movieData);
-        var showId = tvData.results[0].id;
-        console.log(showId);
-    });
+var getId = function(finalName) {
+    request('http://api.themoviedb.org/3/search/tv?api_key=59bb3beb43a54e85495a400befbb2d3c&query=' + finalName,
+        function(error, response, body) {
+            var tvData = JSON.parse(body);
+            //console.log(movieData);
+            showId = tvData.results[0].id;
+            console.log(showId);
+
+        });
+}
 
 //fetch show's youtube trailer
-request('http://api.themoviedb.org/3/tv/' + showId + '/videos?api_key=59bb3beb43a54e85495a400befbb2d3c',
-    function(error, response, body) {
-        console.log(body);
-        var trailerData = JSON.parse(body);
-        console.log(trailerData);
-        var trailerId = trailerData.results[0].key;
-        console.log(trailerId);
-    });
+var getTrailer = function(showId) {
+    console.log('http://api.themoviedb.org/3/tv/' + showId + '/videos?api_key=59bb3beb43a54e85495a400befbb2d3c');
+    if (showId == undefined) {
+        console.log("It didnt work");
+    } else {
+        request('http://api.themoviedb.org/3/tv/' + showId + '/videos?api_key=59bb3beb43a54e85495a400befbb2d3c',
+            function(error, response, body) {
+                var trailerData = JSON.parse(body);
+                console.log(trailerData);
+                trailerId = trailerData.results[0].key;
+                console.log(trailerId);
+            });
+    }
+}
 
 
 
