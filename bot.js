@@ -24,17 +24,16 @@ function tweetEvent(eventMsg) {
     //Method to remove @tvshows_bot from the text
     var tvshowName = text.slice(13, text.length);
 
+    //Method to replace spaces with + for the API
+    var finalName = tvshowName.replace(/ /g, "+");
+    console.log(finalName);
+
+    console.log(replyTo + ' ' + fromUser);
+
     if (replyTo === 'tvshows_bot') {
         var newTweet = '@' + fromUser + ', sorry we cant find ' + tvshowName;
         tweetIt(newTweet);
     }
-
-    //Method to replace spaces with + for the API
-    var finalName = tvshowName.replace(/ /g, "+");
-    console.log("tv name " + tvshowName);
-    console.log(finalName);
-
-    console.log(replyTo + ' ' + fromUser);
 }
 
 function tweetIt(txt) {
