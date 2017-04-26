@@ -14,7 +14,7 @@ var stream = T.stream('user');
 stream.on('tweet', tweetEvent);
 
 var finalName;
-
+var newTweet;
 function tweetEvent(eventMsg) {
     // var fs = require('fs');
     // var json = JSON.stringify(eventMsg, null, 2);
@@ -30,13 +30,19 @@ function tweetEvent(eventMsg) {
     //Method to replace spaces with + for the API
     var finalName = tvshowName.replace(/ /g, "+");
     console.log(finalName);
-
-    getId();
-    getTrailer();
+    getId(finalName);
+    // getTrailer();
 
     if (replyTo === 'tvshows_bot') {
-        var newTweet = '@' + fromUser + ', sorry we cant find ' + tvshowName;
-        tweetIt(newTweet);
+      console.log("in in reply");
+      if(trailerId == undefined) {
+        console.log("trailerId is undefined");
+        newTweet = '@' + fromUser + ', sorry we cant find ' + tvshowName;
+      } else {
+        console.log("trailerId is ok");
+        newTweet = '@' + fromUser + ' this is your trailer, enjoy! https://www.youtube.com/watch?v=' + trailerId;
+      }
+         //https://www.youtube.com/watch?v='+trailerId
     }
 }
 
@@ -50,7 +56,7 @@ function tweetIt(txt) {
         if (err) {
             console.log("Something went wrong! ", err);
         } else {
-            console.log("It worked!");
+            console.log("It worked! we found " + tvshowName);
         }
 
     }
@@ -60,31 +66,36 @@ function tweetIt(txt) {
 //initialize global vars
 var showId;
 var trailerId;
-var finalName;
+// var finalName;
 //fetch show's id by it's title
 var getId = function(finalName) {
+  // console.log("im in getid function");
     request('http://api.themoviedb.org/3/search/tv?api_key=59bb3beb43a54e85495a400befbb2d3c&query=' + finalName,
         function(error, response, body) {
+          // console.log("ime einarararar");
+            //console.log(body);
             var tvData = JSON.parse(body);
-            //console.log(movieData);
+            //console.log(tvData);
             showId = tvData.results[0].id;
-            console.log(showId);
+            console.log("im show id", showId);
+            getTrailer(showId);
 
         });
 }
 
 //fetch show's youtube trailer
-var getTrailer = function(showId) {
-    console.log('http://api.themoviedb.org/3/tv/' + showId + '/videos?api_key=59bb3beb43a54e85495a400befbb2d3c');
+var getTrailer = function(showId, newTweet) {
     if (showId == undefined) {
         console.log("It didnt work");
     } else {
         request('http://api.themoviedb.org/3/tv/' + showId + '/videos?api_key=59bb3beb43a54e85495a400befbb2d3c',
             function(error, response, body) {
+              console.log('http://api.themoviedb.org/3/tv/' + showId + '/videos?api_key=59bb3beb43a54e85495a400befbb2d3c');
                 var trailerData = JSON.parse(body);
-                console.log(trailerData);
+                //ifelse
                 trailerId = trailerData.results[0].key;
                 console.log(trailerId);
+                tweetIt(newTweet);
             });
     }
 }
