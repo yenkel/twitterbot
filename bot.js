@@ -24,6 +24,10 @@ var replyTo;
 var text;
 var fromUser;
 
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 
 
 function tweetEvent(eventMsg, youtubeId) {
@@ -32,9 +36,9 @@ function tweetEvent(eventMsg, youtubeId) {
     // fs.writeFile("tweet.json", json);
 
     replyTo = eventMsg.in_reply_to_screen_name;
-    
     text = eventMsg.text;
     fromUser = eventMsg.user.screen_name;
+
     //Method to remove @tvshows_bot from the text
     tvshowName = text.slice(13, text.length);
 
@@ -43,30 +47,21 @@ function tweetEvent(eventMsg, youtubeId) {
     console.log(finalName);
 
     getId(finalName);
-    // getTrailer(showId);
+
 }
 
 var sendTrailer = function(eventMsg, youtubeId) {
-  console.log("im from user", fromUser );
-    console.log("Function entered");
-    if (replyTo == 'tvshows_bot') {
-        // console.log(trailerId); //undefined
-        // if (!trailerId == undefined) {
-        //     console.log("trailerId is ok");
-        newTweet = '@' + fromUser + ' this is your ' + tvshowName + " trailer, enjoy! " + 'https://www.youtube.com/watch?v=' + trailerId;
-        tweetIt(newTweet);
-        console.log("Tweet sent!");
-        console.log("out");
 
-        // } else {
-        //     console.log("if theres no trailer"); //
-        //     newTweet = '@' + fromUser + ', sorry we cant find ' + tvshowName;
-        //     tweetIt(newTweet);
-        // }
-        //https://www.youtube.com/watch?v='+trailerId
-    } else {
-        console.log("out");
-        
+    if (replyTo == 'tvshows_bot') {
+        if (trailerId !== 'JJzZNPy1yZU') {
+            console.log("trailerId is ok");
+            newTweet = '@' + fromUser + ' this is your ' + capitalizeFirstLetter(tvshowName) + " trailer, enjoy! " + 'https://www.youtube.com/watch?v=' + trailerId;
+            tweetIt(newTweet);
+        } else {
+            newTweet = '@' + fromUser + ', sorry we cant find ' + capitalizeFirstLetter(tvshowName) + ". Please send us another TVshow name";
+            tweetIt(newTweet);
+        }
+
     }
 }
 
@@ -94,7 +89,6 @@ var getId = function(finalName) {
         function(error, response, body) {
             var tvData = JSON.parse(body);
             if (tvData.results.length == 0) {
-                // console.log("theres no such tv show");
                 showId = '2288';
             } else {
                 showId = tvData.results[0].id;
