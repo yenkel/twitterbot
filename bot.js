@@ -15,6 +15,11 @@ stream.on('tweet', tweetEvent);
 var youtubeId;
 var finalName;
 var newTweet;
+var tvshowName;
+var replyTo;
+var text;
+var fromUser;
+var eventMsg;
 
 function tweetEvent(eventMsg) {
     // var fs = require('fs');
@@ -35,15 +40,17 @@ function tweetEvent(eventMsg) {
     // getTrailer();
 
     if (replyTo === 'tvshows_bot') {
-      console.log(trailerId); //undefined
-      if(!trailerId == undefined) {
-        console.log("trailerId is ok");
-        newTweet = '@' + fromUser + ' this is your trailer, enjoy!' + youtubeId;
-      } else {
-        console.log("if theres no trailer"); //
-        newTweet = '@' + fromUser + ', sorry we cant find ' + tvshowName;
-      }
-         //https://www.youtube.com/watch?v='+trailerId
+        console.log(trailerId); //undefined
+        if (!trailerId == undefined) {
+            console.log("trailerId is ok");
+            newTweet = '@' + fromUser + ' this is your trailer, enjoy!' + youtubeId;
+            tweetIt(newTweet);
+        } else {
+            console.log("if theres no trailer"); //
+            newTweet = '@' + fromUser + ', sorry we cant find ' + tvshowName;
+            tweetIt(newTweet);
+        }
+        //https://www.youtube.com/watch?v='+trailerId
     }
 }
 
@@ -73,33 +80,33 @@ var getId = function(finalName) {
         function(error, response, body) {
             var tvData = JSON.parse(body);
             if (tvData.results.length == 0) {
-            console.log("theres no such tv show");
-            showId = '2288';
-          } else {
-            showId = tvData.results[0].id;
-            console.log("im show id", showId);
-            getTrailer(showId);
-          }
+                console.log("theres no such tv show");
+                showId = '2288';
+            } else {
+                showId = tvData.results[0].id;
+                console.log("im show id", showId);
+                getTrailer(showId);
+            }
         });
-      }
+}
 
 //fetch show's youtube trailer
 var getTrailer = function(showId, finalName, eventMsg) {
 
-        request('http://api.themoviedb.org/3/tv/' + showId + '/videos?api_key=59bb3beb43a54e85495a400befbb2d3c',
-            function(error, response, body) {
-              console.log('http://api.themoviedb.org/3/tv/' + showId + '/videos?api_key=59bb3beb43a54e85495a400befbb2d3c');
-                var trailerData = JSON.parse(body);
-                if(trailerData.results.length > 0) {
-                  trailerId = trailerData.results[0].key;
-                  youtubeId = 'https://www.youtube.com/watch?v='+trailerId;
-                  console.log(youtubeId);
-                } else {
-                  trailerId = 'JJzZNPy1yZU';
-                  console.log("we couldnt find " , finalName, "lets watch https://www.youtube.com/watch?v=",trailerId);
-                }
-                tweetEvent(eventMsg);
-            });
+    request('http://api.themoviedb.org/3/tv/' + showId + '/videos?api_key=59bb3beb43a54e85495a400befbb2d3c',
+        function(error, response, body) {
+            console.log('http://api.themoviedb.org/3/tv/' + showId + '/videos?api_key=59bb3beb43a54e85495a400befbb2d3c');
+            var trailerData = JSON.parse(body);
+            if (trailerData.results.length > 0) {
+                trailerId = trailerData.results[0].key;
+                youtubeId = 'https://www.youtube.com/watch?v=' + trailerId;
+                console.log(youtubeId);
+            } else {
+                trailerId = 'JJzZNPy1yZU';
+                console.log("we couldnt find ", finalName, "lets watch https://www.youtube.com/watch?v=", trailerId);
+            }
+            tweetEvent(eventMsg);
+        });
 
 }
 
