@@ -31,31 +31,31 @@ function tweetEvent(eventMsg, youtubeId) {
     // var json = JSON.stringify(eventMsg, null, 2);
     // fs.writeFile("tweet.json", json);
 
-    var replyTo = eventMsg.in_reply_to_screen_name;
-    console.log(replyTo, "im replyTo");
-    var text = eventMsg.text;
-    var fromUser = eventMsg.user.screen_name;
-
-    console.log("im in tweet event");
-    console.log(fromUser, "im from user"); //$tvshows_bot
+    replyTo = eventMsg.in_reply_to_screen_name;
+    
+    text = eventMsg.text;
+    fromUser = eventMsg.user.screen_name;
     //Method to remove @tvshows_bot from the text
-    var tvshowName = text.slice(13, text.length);
+    tvshowName = text.slice(13, text.length);
 
     //Method to replace spaces with + for the API
-    var finalName = tvshowName.replace(/ /g, "+");
+    finalName = tvshowName.replace(/ /g, "+");
     console.log(finalName);
 
     getId(finalName);
     // getTrailer(showId);
 }
 
-var sendTrailer = function(eventMsg, youtubeId, fromUser) {
+var sendTrailer = function(eventMsg, youtubeId) {
   console.log("im from user", fromUser );
     console.log("Function entered");
     if (replyTo == 'tvshows_bot') {
         // console.log(trailerId); //undefined
         // if (!trailerId == undefined) {
         //     console.log("trailerId is ok");
+        newTweet = '@' + fromUser + ' this is your ' + tvshowName + " trailer, enjoy! " + 'https://www.youtube.com/watch?v=' + trailerId;
+        tweetIt(newTweet);
+        console.log("Tweet sent!");
         console.log("out");
 
         // } else {
@@ -65,10 +65,8 @@ var sendTrailer = function(eventMsg, youtubeId, fromUser) {
         // }
         //https://www.youtube.com/watch?v='+trailerId
     } else {
-        newTweet = '@' + fromUser + ' this is your ' + tvshowName + " trailer, enjoy! " + 'https://www.youtube.com/watch?v=' + trailerId;
-        tweetIt(newTweet);
-        console.log("Tweet sent!");
         console.log("out");
+        
     }
 }
 
@@ -91,7 +89,7 @@ function tweetIt(txt) {
 }
 
 //fetch show's id by it's title
-var getId = function(finalName, fromUser) {
+var getId = function(finalName) {
     request('http://api.themoviedb.org/3/search/tv?api_key=59bb3beb43a54e85495a400befbb2d3c&query=' + finalName,
         function(error, response, body) {
             var tvData = JSON.parse(body);
@@ -101,13 +99,13 @@ var getId = function(finalName, fromUser) {
             } else {
                 showId = tvData.results[0].id;
                 console.log("im show id", showId);
-                getTrailer(showId, fromUser);
+                getTrailer(showId);
             }
         });
 }
 
 //fetch show's youtube trailer
-var getTrailer = function(showId, finalName, eventMsg, fromUser) {
+var getTrailer = function(showId) {
 
     request('http://api.themoviedb.org/3/tv/' + showId + '/videos?api_key=59bb3beb43a54e85495a400befbb2d3c',
         function(error, response, body) {
