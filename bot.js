@@ -21,7 +21,9 @@ var tvshowName;
 var showId;
 var trailerId;
 
-function tweetEvent(eventMsg) {
+
+
+function tweetEvent(eventMsg, youtubeId) {
     // var fs = require('fs');
     // var json = JSON.stringify(eventMsg, null, 2);
     // fs.writeFile("tweet.json", json);
@@ -36,14 +38,14 @@ function tweetEvent(eventMsg) {
     //Method to replace spaces with + for the API
     var finalName = tvshowName.replace(/ /g, "+");
     console.log(finalName);
-    // getId(finalName);
-    // getTrailer();
+    getId(finalName);
+    // getTrailer(showId);
 
     if (replyTo === 'tvshows_bot') {
         // console.log(trailerId); //undefined
         // if (!trailerId == undefined) {
         //     console.log("trailerId is ok");
-        newTweet = '@' + fromUser + ' this is your trailer, enjoy!' + tvshowName;
+        newTweet = '@' + fromUser + ' this is your ' + tvshowName + " trailer, enjoy! " + 'https://www.youtube.com/watch?v=' + trailerId;
         tweetIt(newTweet);
         // } else {
         //     console.log("if theres no trailer"); //
@@ -71,41 +73,39 @@ function tweetIt(txt) {
 
 }
 
-// //fetch show's id by it's title
-// var getId = function(finalName) {
-//     request('http://api.themoviedb.org/3/search/tv?api_key=59bb3beb43a54e85495a400befbb2d3c&query=' + finalName,
-//         function(error, response, body) {
-//             var tvData = JSON.parse(body);
-//             if (tvData.results.length == 0) {
-//                 console.log("theres no such tv show");
-//                 showId = '2288';
-//             } else {
-//                 showId = tvData.results[0].id;
-//                 console.log("im show id", showId);
-//                 getTrailer(showId);
-//             }
-//         });
-// }
+//fetch show's id by it's title
+var getId = function(finalName) {
+    request('http://api.themoviedb.org/3/search/tv?api_key=59bb3beb43a54e85495a400befbb2d3c&query=' + finalName,
+        function(error, response, body) {
+            var tvData = JSON.parse(body);
+            if (tvData.results.length == 0) {
+                console.log("theres no such tv show");
+                showId = '2288';
+            } else {
+                showId = tvData.results[0].id;
+                console.log("im show id", showId);
+                getTrailer(showId);
+            }
+        });
+}
 
-// //fetch show's youtube trailer
-// var getTrailer = function(showId, finalName, eventMsg) {
+//fetch show's youtube trailer
+var getTrailer = function(showId, finalName, eventMsg) {
 
-//     request('http://api.themoviedb.org/3/tv/' + showId + '/videos?api_key=59bb3beb43a54e85495a400befbb2d3c',
-//         function(error, response, body) {
-//             console.log('http://api.themoviedb.org/3/tv/' + showId + '/videos?api_key=59bb3beb43a54e85495a400befbb2d3c');
-//             var trailerData = JSON.parse(body);
-//             if (trailerData.results.length > 0) {
-//                 trailerId = trailerData.results[0].key;
-//                 youtubeId = 'https://www.youtube.com/watch?v=' + trailerId;
-//                 console.log(youtubeId);
-//             } else {
-//                 trailerId = 'JJzZNPy1yZU';
-//                 console.log("we couldnt find ", finalName, "lets watch https://www.youtube.com/watch?v=", trailerId);
-//             }
-//             tweetEvent(eventMsg);
-//         });
-
-// }
+    request('http://api.themoviedb.org/3/tv/' + showId + '/videos?api_key=59bb3beb43a54e85495a400befbb2d3c',
+        function(error, response, body) {
+            console.log('http://api.themoviedb.org/3/tv/' + showId + '/videos?api_key=59bb3beb43a54e85495a400befbb2d3c');
+            var trailerData = JSON.parse(body);
+            if (trailerData.results.length > 0) {
+                trailerId = trailerData.results[0].key;
+                youtubeId = 'https://www.youtube.com/watch?v=' + trailerId;
+                console.log(youtubeId);
+            } else {
+                trailerId = 'JJzZNPy1yZU';
+                console.log("we couldnt find " + finalName + " lets watch https://www.youtube.com/watch?v=" + trailerId);
+            }
+        });
+}
 
 
 
