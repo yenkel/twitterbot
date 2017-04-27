@@ -20,6 +20,9 @@ var newTweet;
 var tvshowName;
 var showId;
 var trailerId;
+var replyTo;
+var text;
+var fromUser;
 
 
 
@@ -40,21 +43,31 @@ function tweetEvent(eventMsg, youtubeId) {
     console.log(finalName);
     getId(finalName);
     // getTrailer(showId);
+}
 
-    if (replyTo === 'tvshows_bot') {
+var sendTrailer = function() {
+
+    console.log("Function entered");
+    if (replyTo == 'tvshows_bot') {
         // console.log(trailerId); //undefined
         // if (!trailerId == undefined) {
         //     console.log("trailerId is ok");
-        newTweet = '@' + fromUser + ' this is your ' + tvshowName + " trailer, enjoy! " + 'https://www.youtube.com/watch?v=' + trailerId;
-        tweetIt(newTweet);
+        console.log("out");
+
         // } else {
         //     console.log("if theres no trailer"); //
         //     newTweet = '@' + fromUser + ', sorry we cant find ' + tvshowName;
         //     tweetIt(newTweet);
         // }
         //https://www.youtube.com/watch?v='+trailerId
+    } else {
+        newTweet = '@' + fromUser + ' this is your ' + tvshowName + " trailer, enjoy! " + 'https://www.youtube.com/watch?v=' + trailerId;
+        tweetIt(newTweet);
+        console.log("Tweet sent!");
+        console.log("out");
     }
 }
+
 
 function tweetIt(txt) {
     var tweet = {
@@ -79,7 +92,7 @@ var getId = function(finalName) {
         function(error, response, body) {
             var tvData = JSON.parse(body);
             if (tvData.results.length == 0) {
-                console.log("theres no such tv show");
+                // console.log("theres no such tv show");
                 showId = '2288';
             } else {
                 showId = tvData.results[0].id;
@@ -100,11 +113,15 @@ var getTrailer = function(showId, finalName, eventMsg) {
                 trailerId = trailerData.results[0].key;
                 youtubeId = 'https://www.youtube.com/watch?v=' + trailerId;
                 console.log(youtubeId);
+                sendTrailer();
+
             } else {
                 trailerId = 'JJzZNPy1yZU';
-                console.log("we couldnt find " + finalName + " lets watch https://www.youtube.com/watch?v=" + trailerId);
+                // console.log("we couldnt find " + finalName + " lets watch https://www.youtube.com/watch?v=" + trailerId);
+                sendTrailer();
             }
         });
+
 }
 
 
