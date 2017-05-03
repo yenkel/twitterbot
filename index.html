@@ -1,0 +1,77 @@
+<html ng-app="fightbds">
+ <head>
+   <title></title>
+   <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="style.css">
+
+ </head>
+ <body>
+   
+       <div class="fluid-container">
+         <div class="row">
+           <div class="col-lg-5 col-md-6 col-xs-6 text-center" style="background-color:red;height:100%">
+             <h2>bds</h2>
+             <input type="text" class="input-padding" style="width:150px;" ng-model="search.bds" placeholder="search"> <br> <br>
+              <div class="tags">
+                          <p class="tag">{{bds.tag01}}</p>
+                          <p class="tag">{{bds.tag02}}</p>
+                          <p class="tag">{{bds.tag03}}</p><br>
+                          <p class="tag">{{bds.tag04}}</p>
+                          <p class="tag">{{bds.tag05}}</p>
+                          <p ng-if="project.tag06" class="tag">{{bds.tag06}}</p>
+                          <p ng-if="project.tag07" class="tag">{{bds.tag07}}</p>
+                          <p ng-if="project.tag08" class="tag">{{bds.tag08}}</p>
+              </div>
+            <br><br>
+            <a class="twitter-timeline" href="https://twitter.com/BDSmovement">Tweets by BDSmovement</a> <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+           </div>
+
+           <div class="col-lg-2 text-center" style="background-color:yellow;height:100%;margin-top:500px;">
+            <button>fight</button>
+           </div>
+
+           <div class="col-lg-5 col-md-6 col-xs-6 text-center" style="background-color:#000;height:100%">
+                 <h2>israel firewall</h2>
+                <input type="text" style="width:150px;" class="input-padding" ng-model="search.israel" placeholder="search">
+                <br><br>
+              <div class="tags">
+                          <p class="tag">{{isr.tag01}}</p>
+                          <p class="tag">{{isr.tag02}}</p>
+                          <p class="tag">{{isr.tag03}}</p><br>
+                          <p class="tag">{{isr.tag04}}</p>
+                          <p class="tag">{{isr.tag05}}</p>
+                          <p ng-if="project.tag06" class="tag">{{isr.tag06}}</p>
+                          <p ng-if="project.tag07" class="tag">{{isr.tag07}}</p>
+                          <p ng-if="project.tag08" class="tag">{{isr.tag08}}</p>
+             </div>
+              <br><br>
+                <a class="twitter-timeline" href="https://twitter.com/FirewallIsrael">Tweets by FirewallIsrael</a> 
+                <br><br>
+          </div>
+        </div>
+    </div>                   
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+     <script>window.twttr = (function(d, s, id) {
+              var js, fjs = d.getElementsByTagName(s)[0],
+                t = window.twttr || {};
+              if (d.getElementById(id)) return t;
+              js = d.createElement(s);
+              js.id = id;
+              js.src = "https://platform.twitter.com/widgets.js";
+              fjs.parentNode.insertBefore(js, fjs);
+
+             t._e = [];
+              t.ready = function(f) {
+                t._e.push(f);
+              };
+
+             return t;
+            }(document, "script", "twitter-wjs"));</script>
+     <script type="text/javascript" src="js/app.js"></script>  
+     <script type="text/javascript" src="js/mainController.js"></script>
+     <script type="text/javascript" src="js/service.js"></script>
+     <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+ </body>
+ </html> 

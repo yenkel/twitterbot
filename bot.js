@@ -23,6 +23,7 @@ var trailerId;
 var replyTo;
 var text;
 var fromUser;
+var movieOverview;
 
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -50,12 +51,12 @@ function tweetEvent(eventMsg, youtubeId) {
 
 }
 
-var sendTrailer = function(eventMsg, youtubeId) {
+var sendTrailer = function(eventMsg, youtubeId, movieOverview) {
 
     if (replyTo == 'tvshows_bot') {
         if (trailerId !== 'JJzZNPy1yZU') {
             console.log("trailerId is ok");
-            newTweet = '@' + fromUser + ' this is your ' + capitalizeFirstLetter(tvshowName) + " trailer, enjoy! " + 'https://www.youtube.com/watch?v=' + trailerId;
+            newTweet = '@' + fromUser + ' this is your ' + capitalizeFirstLetter(tvshowName) + " trailer, enjoy! " + 'https://www.youtube.com/watch?v=' + trailerId + 'and this is the overview' + movieOverview;
             tweetIt(newTweet);
         } else {
             newTweet = '@' + fromUser + ', sorry we cant find ' + capitalizeFirstLetter(tvshowName) + ". Please send us another TVshow name";
@@ -89,7 +90,9 @@ var getId = function(finalName) {
         function(error, response, body) {
             var tvData = JSON.parse(body);
             if (tvData.results.length == 0) {
-                showId = '2288';
+                console.log("im gonna search movie now")
+                // showId = '2288';
+                getIdMovie(finalName);
             } else {
                 showId = tvData.results[0].id;
                 console.log("im show id", showId);
@@ -121,6 +124,46 @@ var getTrailer = function(showId) {
 
 }
 
+//fetch movie's id by it's title
+var getIdMovie = function(finalName) {
+    request('http://api.themoviedb.org/3/search/movie?api_key=59bb3beb43a54e85495a400befbb2d3c&query=' + finalName,
+        function(error, response, body) {
+            console.log("im inside get id movie")
+            var movieData = JSON.parse(body);
+            if (movieData.results.length == 0) {
+                showId = '2288';
+            } else {
+                showId = movieData.results[0].id;
+                movieOverview = movieData.results[0].overview;
+                console.log(movieOverview)
+                console.log("im show id", showId);
+                getTrailerMovie(showId,movieOverview);
+            }
+        });
+}
+
+//fetch movie's youtube trailer
+var getTrailerMovie = function(showId, movieOverview) {
+
+    request('http://api.themoviedb.org/3/movie/' + showId + '/videos?api_key=59bb3beb43a54e85495a400befbb2d3c',
+        function(error, response, body) {
+            //console.log('http://api.themoviedb.org/3/tv/' + showId + '/videos?api_key=59bb3beb43a54e85495a400befbb2d3c');
+            var trailerDataMovie = JSON.parse(body);
+            if (trailerDataMovie.results.length > 0) {
+                trailerId = trailerDataMovie.results[0].key;
+                youtubeId = 'https://www.youtube.com/watch?v=' + trailerId;
+                console.log(youtubeId);
+                console.log("im user", fromUser);
+                sendTrailer(fromUser);
+
+            } else {
+                trailerId = 'JJzZNPy1yZU';
+                // console.log("we couldnt find " + finalName + " lets watch https://www.youtube.com/watch?v=" + trailerId);
+                sendTrailer(fromUser);
+            }
+        });
+
+}
 
 
 // // RETWEET BOT ==========================
