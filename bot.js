@@ -56,7 +56,7 @@ var sendTrailer = function(eventMsg, youtubeId, movieOverview) {
     if (replyTo == 'tvshows_bot') {
         if (trailerId !== 'JJzZNPy1yZU') {
             console.log("trailerId is ok");
-            newTweet = '@' + fromUser + ' this is your ' + capitalizeFirstLetter(tvshowName) + " trailer, enjoy! " + 'https://www.youtube.com/watch?v=' + trailerId + 'and this is the overview' + movieOverview;
+            newTweet = '@' + fromUser + ' this is your ' + capitalizeFirstLetter(tvshowName) + " trailer, enjoy! " + 'https://www.youtube.com/watch?v=' + trailerId;
             tweetIt(newTweet);
         } else {
             newTweet = '@' + fromUser + ', sorry we cant find ' + capitalizeFirstLetter(tvshowName) + ". Please send us another TVshow name";
@@ -91,7 +91,7 @@ var getId = function(finalName) {
             var tvData = JSON.parse(body);
             if (tvData.results.length == 0) {
                 console.log("im gonna search movie now")
-                // showId = '2288';
+                    // showId = '2288';
                 getIdMovie(finalName);
             } else {
                 showId = tvData.results[0].id;
@@ -137,7 +137,7 @@ var getIdMovie = function(finalName) {
                 movieOverview = movieData.results[0].overview;
                 console.log(movieOverview)
                 console.log("im show id", showId);
-                getTrailerMovie(showId,movieOverview);
+                getTrailerMovie(showId, movieOverview);
             }
         });
 }
